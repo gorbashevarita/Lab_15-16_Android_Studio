@@ -3,7 +3,9 @@ package com.gorbacheva.lab_15_16_android_studio.ui_model
 import android.security.identity.AccessControlProfile
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,9 +17,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -102,6 +106,7 @@ fun HomeScreen(
     onSubjectClick: (String) -> Unit,
     onProfileClick: () -> Unit,
     onSettingsClick: () -> Unit,
+    onScheduleClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -110,35 +115,37 @@ fun HomeScreen(
                 title = { Text("Мои дисциплины") },
                 actions = {
                     IconButton(onClick = onProfileClick) {
-                        Icon(
-                            imageVector = Icons.Default.Person,
-                            contentDescription = "Профиль"
-                        )
+                        Icon(imageVector = Icons.Default.Person, contentDescription = "Профиль")
                     }
                     IconButton(onClick = onSettingsClick) {
-                        Icon(
-                            imageVector = Icons.Default.Settings,
-                            contentDescription = "Настройки"
-                        )
+                        Icon(imageVector = Icons.Default.Settings, contentDescription = "Настройки")
                     }
                 }
             )
-        }
-    ) {
-        paddingValues ->
-        LazyColumn(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            items(sampleSubject) { subject ->
-                SubjectCard(
-                    subject = subject,
-                    onClick = { onSubjectClick(subject.id) }
-                )
+        },
+        floatingActionButton = {
+            Button(
+                onClick = onScheduleClick,
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text("Посмотреть расписание")
+            }
+        },
+        floatingActionButtonPosition = FabPosition.End,
+        content = { paddingValues ->
+            LazyColumn(
+                modifier = modifier.fillMaxSize(),
+                contentPadding = paddingValues,
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                items(sampleSubject) { subject ->
+                    SubjectCard(
+                        subject = subject,
+                        onClick = { onSubjectClick(subject.id) }
+                    )
+                }
             }
         }
-    }
+    )
 }
